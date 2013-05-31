@@ -1,5 +1,5 @@
 import csv
-reader = csv.reader(file('abc_data.csv'), delimiter=',')
+reader = csv.reader(file('abc_data.csv'), delimiter=',', "U")
 header = reader.next()
 print header
 
