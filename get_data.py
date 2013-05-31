@@ -5,6 +5,8 @@ import urllib
 
 from BeautifulSoup import BeautifulSoup, SoupStrainer
 
+counter = 0
+
 query_url = 'http://dds.cr.usgs.gov/srtm/version2_1/SRTM3/Australia/'
 
 http = httplib2.Http()
@@ -19,7 +21,8 @@ for link in BeautifulSoup(response, parseOnlyThese=SoupStrainer('a')):
 			# if (int(suffix[1:3]) > 29) and (int(suffix[-11:-8])> 141) == True:
 			urllib.urlretrieve(query_url + "/" + suffix, filename =  suffix )
 			print 'Success with: ' + suffix
+			counter = counter + 1
 	except:
 		continue
 
-	
+print counter + ' files downloaded successfully'
