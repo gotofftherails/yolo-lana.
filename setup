@@ -1,0 +1,29 @@
+Ensure Python and Python tools are deployed.  The means easy_install is in place.
+
+
+# sudo apt-get install python-setuptools
+
+Use easy install to install BeautifulSoup
+
+# easy_install beautiful soup
+
+Download the required files
+
+# python get_data.py
+
+Install unzip and unzip the files.
+
+# sudo apt-get install unzip
+
+Unzip the DEM files.
+
+# unzip "*.zip"
+
+Remove the zip files
+
+rm *.zip
+
+
+Convert from hgt to sdf...
+
+# for f in *.hgt ; do srtm2sdf "$f" ; done
