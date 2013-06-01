@@ -1,5 +1,5 @@
 import csv
-reader = csv.reader(file('abc_data.csv'), delimiter=',', "U")
+reader = csv.reader(file('abc_data.csv'), delimiter=',')
 header = reader.next()
 print header
 
@@ -12,7 +12,7 @@ for row in reader:
     #print '%r' % row
     base_filename = '%s_%s' % (row[headerMap['Area Served']].replace(' ','').replace('/',''), row[headerMap['Callsign']])
     lat = '-' + row[headerMap['Latitude']].strip().replace('S','')
-    lon = row[headerMap['Longitude']].strip().replace('E','')
+    lon = '-' + row[headerMap['Longitude']].strip().replace('E','')
     height = row[headerMap['Mast Height (m)']].strip() + 'm'
     g = file('%s.qth' % base_filename, 'w')
     print >> g, base_filename
