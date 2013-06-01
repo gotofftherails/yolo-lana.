@@ -1,5 +1,8 @@
 import os
 
+#filename = 'MelbourneJJJ'
+
+
 
 def create(file_name):
 	#create ppm and KML
@@ -7,7 +10,7 @@ def create(file_name):
 	print cpk
 	#resize ppm file 
 	resize = 'pnmscale -xsize 1200 ' + file_name + '.ppm' 
-
+	
 	#make opaque here
 
 	#White to transparent
@@ -15,6 +18,7 @@ def create(file_name):
 
 	#Convert ppm to png
 	p2p = 'pnmtopng ' + file_name + '_trans.ppm ' + file_name + '.png' 
+	print p2p
 
 	#remove trans file
 	rm_trans = 'rm ' + file_name +'_trans.ppm'
@@ -24,29 +28,38 @@ def create(file_name):
 
 	#convert to GeoTIFF
 
-	print 'Creating coverage map'
-	os.system(cpk)
-	print 'Coverage map created'
-	print
-	print 'Converting white to transparency'
-	os.system(w2t) 
-	print 'Converted white to transparency'
-	print
-	print 'Converting ppm to png'
-	os.system(p2p)
-	print 'Converted ppm to png'
-	print
-	print 'Cleaning file'
-	os.system(rm_trans)
-	print 'File cleaned'
-	print 'Rewriting KML'
-	os.system(rw_kml)
-	print 'KML rewritten'
-	print 'PNG filename:' + file_name +'.png'
-	print 'KML filename:' + file_name +'.kml'
 
+	try:
+		print 'Creating coverage map'
+		os.system(cpk)
+		print 'Coverage map created'
+	except:
+		print 'Coverage map failed...'	
+	try:
+		print 'Converting white to transparency'
+		os.system(w2t)
+		print 'Converted white to transparency'
+	except:
+		'Converting white to transparency failed' 
+	try:
+		print 'Converting ppm to png'
+		os.system(p2p)
+		print 'Converted ppm to png'
+	except:
+		print 'Failed converting ppm to png'
+	try:
+		print 'Cleaning file'
+		os.system(rm_trans)
+		print 'File cleaned'
+	except:
+		print 'Cleaning file failed'
 
-
-create(filename)
-
+	try:
+		print 'Rewriting KML'
+		os.system(rw_kml)
+		print 'KML rewritten'
+		print 'PNG filename:' + file_name +'.png'
+		print 'KML filename:' + file_name +'.kml'
+	except:
+		print 'Rewriting KML failed'
 
