@@ -1,11 +1,8 @@
 import os
 
-#filename = 'MelbourneJJJ'
-
-
 
 def create(file_name):
-  #create ppm and KML
+	#create ppm and KML
 	cpk = 'splat -t ' + file_name + ' -o -c 2.0 '+ file_name + '.ppm -ngs -kml -metric'
 	print cpk
 	#resize ppm file 
@@ -17,7 +14,7 @@ def create(file_name):
 	w2t = 'convert -transparent "#FFFFFF" ' + file_name + '.ppm ' + file_name +'_trans.ppm'
 
 	#Convert ppm to png
-	p2p = 'pnmtopng ' + file_name + '_trans.ppm' + file_name + '.png' 
+	p2p = 'pnmtopng ' + file_name + '_trans.ppm ' + file_name + '.png' 
 
 	#remove trans file
 	rm_trans = 'rm ' + file_name +'_trans.ppm'
