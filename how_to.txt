@@ -1,0 +1,75 @@
+
+==Acquiring the  data==
+
+Get the Digital Elevation Model (DEM) data.  This can be dowloaded from a number of places.
+
+To get all of Australia, use this script, this is around 7GB of data.
+
+https://github.com/gotofftherails/yolo-lana./blob/master/get_data.py
+
+You will now have a multitude of files, which can now be unzipped all in one hit.
+
+$ unzip "*.zip"
+
+Convert the DEM data into a format SPLAT! can use (SDF).
+
+$ srtm2sdf *.xxx
+
+This data can now be used within SPLAT.
+
+You will then need further information to drive SPLAT!.  From data.gov.au you can get the follwoing spreadsheet (http://data.gov.au/dataset/licensed-broadcasting-transmitter-data/) which offers a stack of useful information, importantly:
+* Transmit powers
+* Antenna height
+* Transmit frequency
+* Call sign
+* Location (x,y coordinate)
+
+And other goodies.
+
+To use Splat at a minimum two files need to be created a .qth and a .lrp.  Both files are created from the spreadsheet.
+
+
+Saved as a csv the file can be parsed with the following script:
+
+https://github.com/gotofftherails/yolo-lana./blob/master/create_input_files.py
+
+The script can be used in two ways - either to generate all .qth and .lrp files in one hit, or to call the create_coverage_files.py as a module and pass them through one by one.
+
+==Creating Coverage Files==
+
+The process of creating usable coverage files requires the following:
+
+* Create a PPM and KML to reference it
+* Reszie the PPM file
+* Create an opacity for the file
+* Turn all white into a transparency
+* Convert the PPM to a PNG
+* Rewrite the KML using sed to reference the new PNG file.
+
+At this stage files exist that can be viewed in Google Maps or Google Earth.
+
+The following script can be used to automate this, you can call this as a module if required.
+
+https://github.com/gotofftherails/yolo-lana./blob/master/create_coverage_files.py
+
+The next step is to convert to a format usable in GIS systems.  The images are simply images and do not convey geographic information yet.
+
+The process is to:
+
+* Convert the file KML and png to a world file.  
+* Convert the world file to a geotiff
+
+
+The following shell script can be used to batch the KML.
+https://github.com/gotofftherails/yolo-lana./blob/master/kml2wld.sh
+
+First you need to zip all KMl into a .kmz.  To do this:
+
+$ zip filename.kmz filename.kml
+
+The world file has three parts, a png, xml and xxx
+
+You can then convert the world file to geotiff with the following:
+
+
+$ gdalwarp input.png output.tif
