@@ -1,0 +1,39 @@
+=Creating Coverage=
+
+# Acquire data
+#DEM data
+
+# Get the DEM data  - this is about 8GB of data for all of Australia, use this script
+
+https://github.com/gotofftherails/yolo-lana./blob/master/get_data.py
+
+# Unzip the data
+
+unzip "*.zip"
+
+#Convert the DEM data into a for SPLAT! can use
+
+srtm2sdf *.xxx
+
+# 
+
+# Beginning with a KML with georefrenced ppm.
+# Convert from ppm to png
+
+$ pnmtopng input.ppm > output.png
+
+# Using Image Magick convert white to transperency
+
+$ convert -transparent #FFFFFF input.png  output.png
+
+# Rewrite the KML using to reference the newly created png rather than the ppm
+
+$ sed -i 's/.ppm/.png/g' input.kml
+
+Convert the KML to a world file 
+
+$ kml2wld.sh
+
+Convert the world file to a geotiff
+
+$ gdalwarp input.png output.tif
