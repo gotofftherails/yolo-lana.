@@ -9,6 +9,9 @@
 # Usage : kml2wld.sh <kmzdirectory>
 # Parameter <kmzdirectory> : directory containing kmz files to convert
 
+# Modified : Chris Guest 2013-06-01
+# Ignore root img files, remove French locale transforms.
+
 if [[ $# != 1 || ! ( -d $1 ) ]]
 then echo "Vous devez fournir 1 paramètre : le répertoire contenant les fichiers kmz à traiter" >&2
      exit 1
@@ -16,16 +19,19 @@ fi
 
 path="$1/img"
 mkdir "$path"
-for kmz in $(ls -1 $1/*.kmz)
+for kml in $(ls -1 $1/*.kml)
 do
-  bn=$(basename $kmz .kmz)
-  unzip -C -d "$path" "$kmz" "doc.kml"
-  mv "$path/doc.kml" "$path/$bn.kml"
-  for imgname in $(grep href "$path/$bn.kml" | sed 's/^.*>\([^<]*\)<.*/\1/')
+  bn=$(basename $kml .kml)
+  #unzip -C -d "$path" "$kmz" "doc.kml"
+  #mv "$path/doc.kml" "$path/$bn.kml"
+  cp "$kml" "$path/$bn.kml"
+  for imgname in $(grep href "$path/$bn.kml" | sed 's/^.*>\([^<]*\)<.*/\1/' | grep -v '^root' | grep -v ppm)
   do
-    unzip -C -d "$path" "$kmz" "$imgname"
+    # unzip -C -d "$path" "$kmz" "$imgname"
+    cp -a $imgname $path/$imgname
     extimg=$(echo ${imgname#*.})
     bnimg=$(basename $imgname .$extimg)
+  echo "moving $path/$imgname  to $path/${bn}_${bnimg}.$extimg "
     mv "$path/$imgname" "$path/${bn}_${bnimg}.$extimg"
 
     width=$(identify -format "%w" "$path/${bn}_${bnimg}.$extimg")
@@ -37,13 +43,16 @@ do
     east=$(echo $imgcoord | sed 's/^.*<east>\([0-9-][0-9\.]*\)<\/east>.*/\1/')
     west=$(echo $imgcoord | sed 's/^.*<west>\([0-9-][0-9\.]*\)<\/west>.*/\1/')
   
+	echo "EWNS: " $east $west $north $south
     dimX=$(echo "($east-($west))/$width" | bc -l)
-    A=$(printf "%e" $(echo $dimX | tr . ,))
-    A=$(echo $A | tr , .)
+    #A=$(printf "%e" $(echo $dimX | tr . ,))
+    #A=$(echo $A | tr , .)
+	A=$(printf "%e" $(echo $dimX))
   
     dimY=$(echo "($south-($north))/$height" | bc -l)
-    E=$(printf "%e" $(echo $dimY | tr . ,))
-    E=$(echo $E | tr , .)
+    #E=$(printf "%e" $(echo $dimY | tr . ,))
+    #E=$(echo $E | tr , .)
+    E=$(printf "%e" $(echo $dimY))
   
     C=$(echo "$west+($dimX/2)" | bc -l)
 
