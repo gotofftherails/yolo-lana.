@@ -7,13 +7,14 @@
 # Date : 2011-03-24
 # Version : 2.0
 # Usage : kml2wld.sh <kmzdirectory>
-# Parameter <kmzdirectory> : directory containing kmz files to convert
+# Parameter <kmldirectory> : directory containing kml files to convert
 
 # Modified : Chris Guest 2013-06-01
 # Ignore root img files, remove French locale transforms.
+# Subsequently modifed
 
 if [[ $# != 1 || ! ( -d $1 ) ]]
-then echo "Vous devez fournir 1 paramètre : le répertoire contenant les fichiers kmz à traiter" >&2
+then echo "You must provide the directory the KML files are in" >&2
      exit 1
 fi
 
@@ -93,7 +94,7 @@ do
       echo "</PAMDataset>" >> "$auxpath"
 
     else
-      echo "Le format du fichier $path/${bn}_${bnimg}.$extimg n'est pas supporté, aucun fichier de géolocalisation n'a pu être généré"
+      echo "The file fomrat $path/${bn}_${bnimg}.$extimg is not supported, no geolocation file could not be generated"
     fi
 
   done
