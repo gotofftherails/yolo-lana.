@@ -36,24 +36,24 @@ do
 
     width=$(identify -format "%w" "$path/${bn}_${bnimg}.$extimg")
     height=$(identify -format "%h" "$path/${bn}_${bnimg}.$extimg")
-  
+
     imgcoord=$(grep -A 10 "$imgname" "$path/$bn.kml")
     north=$(echo $imgcoord | sed 's/^.*<north>\([0-9-][0-9\.]*\)<\/north>.*/\1/')
     south=$(echo $imgcoord | sed 's/^.*<south>\([0-9-][0-9\.]*\)<\/south>.*/\1/')
     east=$(echo $imgcoord | sed 's/^.*<east>\([0-9-][0-9\.]*\)<\/east>.*/\1/')
     west=$(echo $imgcoord | sed 's/^.*<west>\([0-9-][0-9\.]*\)<\/west>.*/\1/')
-  
+
 	echo "EWNS: " $east $west $north $south
     dimX=$(echo "($east-($west))/$width" | bc -l)
     #A=$(printf "%e" $(echo $dimX | tr . ,))
     #A=$(echo $A | tr , .)
 	A=$(printf "%e" $(echo $dimX))
-  
+
     dimY=$(echo "($south-($north))/$height" | bc -l)
     #E=$(printf "%e" $(echo $dimY | tr . ,))
     #E=$(echo $E | tr , .)
     E=$(printf "%e" $(echo $dimY))
-  
+
     C=$(echo "$west+($dimX/2)" | bc -l)
 
     F=$(echo "$north+($dimY/2)" | bc -l)
@@ -71,7 +71,7 @@ do
     if [[ $extimg == "gif" || $extimg == "GIF" ]]
     then extwld="gfw"
     fi
-  
+
     if [[ $extwld != "none" ]]
     then
       echo $A > "$path/${bn}_${bnimg}.$extwld"
@@ -91,13 +91,13 @@ do
       echo "    <MDI key="PyramidResamplingType">NEAREST</MDI>" >> "$auxpath"
       echo "  </Metadata>" >> "$auxpath"
       echo "</PAMDataset>" >> "$auxpath"
-    
+
     else
       echo "Le format du fichier $path/${bn}_${bnimg}.$extimg n'est pas supporté, aucun fichier de géolocalisation n'a pu être généré"
     fi
-    
+
   done
-  
+
 done
 rm "$path"/*.kml
 #rmdir "$path"/files
